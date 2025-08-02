@@ -7,19 +7,19 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/scrollreveal"></script>
 </head>
-<body class="bg-gradient-to-b from-blue-100 to-white text-gray-800">
+<body class="bg-gradient-to-b from-blue-100 to-white text-gray-800 transition-all duration-300">
   <!-- Header -->
   <header class="bg-blue-700 text-white p-6 shadow-lg flex justify-between items-center">
     <h1 class="text-2xl font-bold">✡ Ministry & Portfolio</h1>
     <div>
-      <button onclick="switchLang('zh')" class="px-2">中文</button>
-      <button onclick="switchLang('en')" class="px-2">EN</button>
-      <button onclick="switchLang('he')" class="px-2">עברית</button>
+      <button onclick="switchLang('zh')" class="px-2 hover:underline">中文</button>
+      <button onclick="switchLang('en')" class="px-2 hover:underline">EN</button>
+      <button onclick="switchLang('he')" class="px-2 hover:underline">עברית</button>
     </div>
   </header>
 
   <!-- Hero Section -->
-  <section class="text-center py-16 bg-[url('https://upload.wikimedia.org/wikipedia/commons/d/d4/Jerusalem_old_city.jpg')] bg-cover bg-center text-white">
+  <section class="text-center py-16 bg-[url('https://upload.wikimedia.org/wikipedia/commons/d/d4/Jerusalem_old_city.jpg')] bg-cover bg-center text-white reveal">
     <div class="bg-black bg-opacity-50 p-8 inline-block rounded-2xl">
       <h2 id="hero-title" class="text-4xl font-bold mb-4">Welcome to Our Ministry</h2>
       <p id="hero-subtitle" class="text-lg">Sharing testimonies & works for the Kingdom of God</p>
@@ -27,38 +27,21 @@
   </section>
 
   <!-- About Section -->
-  <section class="max-w-4xl mx-auto text-center py-16 px-4">
+  <section class="max-w-4xl mx-auto text-center py-16 px-4 reveal">
     <h3 id="about-title" class="text-3xl font-bold text-blue-700 mb-6">About Our Ministry</h3>
     <p id="about-text" class="text-lg leading-relaxed">We are dedicated to sharing the Gospel and creative works inspired by Israel.</p>
   </section>
 
   <!-- Portfolio Section -->
-  <section class="bg-blue-50 py-16">
+  <section class="bg-blue-50 py-16 reveal">
     <h3 id="portfolio-title" class="text-3xl font-bold text-center text-blue-700 mb-10">Our Works</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
-      <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Olive_tree_in_Israel.jpg" alt="Work 1" class="w-full h-48 object-cover">
-        <div class="p-4">
-          <h4 class="font-semibold" id="portfolio-item1">Olive Tree</h4>
-        </div>
-      </div>
-      <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Jerusalem_Wall.jpg" alt="Work 2" class="w-full h-48 object-cover">
-        <div class="p-4">
-          <h4 class="font-semibold" id="portfolio-item2">Jerusalem Wall</h4>
-        </div>
-      </div>
-      <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sea_of_Galilee_-_sunset.jpg" alt="Work 3" class="w-full h-48 object-cover">
-        <div class="p-4">
-          <h4 class="font-semibold" id="portfolio-item3">Sea of Galilee</h4>
-        </div>
-      </div>
+    <div id="portfolio-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
+      <!-- 作品會由 JS 動態生成 -->
     </div>
   </section>
 
   <!-- Contact Section -->
-  <section class="py-16 text-center">
+  <section class="py-16 text-center reveal">
     <h3 id="contact-title" class="text-3xl font-bold text-blue-700 mb-6">Contact Us</h3>
     <p id="contact-text">Email: ministry@example.com</p>
   </section>
@@ -69,6 +52,7 @@
   </footer>
 
   <script>
+    // --- 多語言資料 ---
     const translations = {
       en: {
         heroTitle: "Welcome to Our Ministry",
@@ -76,7 +60,6 @@
         aboutTitle: "About Our Ministry",
         aboutText: "We are dedicated to sharing the Gospel and creative works inspired by Israel.",
         portfolioTitle: "Our Works",
-        portfolioItems: ["Olive Tree", "Jerusalem Wall", "Sea of Galilee"],
         contactTitle: "Contact Us",
         contactText: "Email: ministry@example.com"
       },
@@ -86,7 +69,6 @@
         aboutTitle: "關於我們的事工",
         aboutText: "我們致力於分享福音，並展示受以色列啟發的創意作品。",
         portfolioTitle: "作品集",
-        portfolioItems: ["橄欖樹", "耶路撒冷城牆", "加利利海"],
         contactTitle: "聯絡我們",
         contactText: "電子郵件：ministry@example.com"
       },
@@ -96,30 +78,56 @@
         aboutTitle: "על השירות שלנו",
         aboutText: "אנו מוקדשים לשיתוף הבשורה והיצירות בהשראת ישראל.",
         portfolioTitle: "העבודות שלנו",
-        portfolioItems: ["עץ זית", "חומת ירושלים", "ים כנרת"],
         contactTitle: "צור קשר",
-        contactText: "דוא" + "ל: ministry@example.com"
+        contactText: "דוא\"ל: ministry@example.com"
       }
     };
 
+    // --- 作品集資料（未來可從 JSON 載入） ---
+    const portfolioItems = [
+      { type: "image", src: "https://upload.wikimedia.org/wikipedia/commons/5/5c/Olive_tree_in_Israel.jpg", title: { en: "Olive Tree", zh: "橄欖樹", he: "עץ זית" }},
+      { type: "image", src: "https://upload.wikimedia.org/wikipedia/commons/8/8b/Jerusalem_Wall.jpg", title: { en: "Jerusalem Wall", zh: "耶路撒冷城牆", he: "חומת ירושלים" }},
+      { type: "video", src: "https://www.youtube.com/embed/Scxs7L0vhZ4", title: { en: "Ministry Video", zh: "事工影片", he: "סרטון שירות" }}
+    ];
+
+    // --- 動態生成作品集 ---
+    const container = document.getElementById("portfolio-container");
+    function renderPortfolio(lang) {
+      container.innerHTML = "";
+      portfolioItems.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform";
+
+        if(item.type === "image") {
+          card.innerHTML = `
+            <img src="${item.src}" class="w-full h-48 object-cover">
+            <div class="p-4"><h4 class="font-semibold">${item.title[lang]}</h4></div>`;
+        } else if(item.type === "video") {
+          card.innerHTML = `
+            <iframe class="w-full h-48" src="${item.src}" allowfullscreen></iframe>
+            <div class="p-4"><h4 class="font-semibold">${item.title[lang]}</h4></div>`;
+        }
+        container.appendChild(card);
+      });
+    }
+
+    // --- 切換語言 ---
     function switchLang(lang){
       document.getElementById('hero-title').innerText = translations[lang].heroTitle;
       document.getElementById('hero-subtitle').innerText = translations[lang].heroSubtitle;
       document.getElementById('about-title').innerText = translations[lang].aboutTitle;
       document.getElementById('about-text').innerText = translations[lang].aboutText;
       document.getElementById('portfolio-title').innerText = translations[lang].portfolioTitle;
-      document.getElementById('portfolio-item1').innerText = translations[lang].portfolioItems[0];
-      document.getElementById('portfolio-item2').innerText = translations[lang].portfolioItems[1];
-      document.getElementById('portfolio-item3').innerText = translations[lang].portfolioItems[2];
       document.getElementById('contact-title').innerText = translations[lang].contactTitle;
       document.getElementById('contact-text').innerText = translations[lang].contactText;
+
+      document.body.dir = (lang === 'he') ? 'rtl' : 'ltr';
+      renderPortfolio(lang);
     }
 
-    ScrollReveal().reveal('section', { delay: 200, distance: '40px', origin: 'bottom', duration: 800 });
+    // --- 初始化頁面 ---
+    renderPortfolio('en');
+    ScrollReveal().reveal('.reveal', { delay: 200, distance: '40px', origin: 'bottom', duration: 800 });
   </script>
 </body>
 </html>
-
-
-已經為
-
